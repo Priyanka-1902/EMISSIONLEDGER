@@ -1,0 +1,112 @@
+{
+  "ruleset": "CBAM Compliance Rules",
+  "regulation": "Regulation (EU) 2023/956 and Commission Implementing Regulation (EU) 2023/1773",
+  "version": "2024.Q1",
+  "effective_from": "2024-01-01",
+  "rules": [
+    {
+      "id": "CBAM-001",
+      "name": "CBAM Declarant ID Required for Submission",
+      "description": "An EU CBAM declarant ID must be registered before submitting CBAM reports to the EU Registry.",
+      "category": "cbam",
+      "severity": "error",
+      "regulation_reference": "Regulation (EU) 2023/956, Art. 5",
+      "condition": {
+        "required": ["tenant.cbam_declarant_id"],
+        "properties": {
+          "tenant.cbam_declarant_id": {"minLength": 1}
+        }
+      },
+      "message_template": "CBAM Declarant ID is missing. Register at the EU CBAM Transitional Registry before submitting.",
+      "remediation_url": "https://cbam.ec.europa.eu/declarant/registration"
+    },
+    {
+      "id": "CBAM-002",
+      "name": "Reporting Period Completeness — All Quarters Required",
+      "description": "CBAM quarterly report must cover all calendar months in the quarter with no gaps.",
+      "category": "cbam",
+      "severity": "error",
+      "regulation_reference": "Implementing Regulation (EU) 2023/1773, Art. 5",
+      "condition": {
+        "properties": {
+          "report.data_completeness_pct": {"minimum": 100}
+        }
+      },
+      "message_template": "CBAM report data completeness is {report.data_completeness_pct}%. All import records for the quarter must be included."
+    },
+    {
+      "id": "CBAM-003",
+      "name": "CBAM Goods CN Code Required",
+      "description": "Each CBAM goods line item must have a valid Combined Nomenclature (CN) code.",
+      "category": "cbam",
+      "severity": "error",
+      "regulation_reference": "Implementing Regulation (EU) 2023/1773, Annex I",
+      "condition": {
+        "required": ["report.cbam_cn_codes"],
+        "properties": {
+          "report.cbam_cn_codes": {"minLength": 1}
+        }
+      },
+      "message_template": "CBAM CN codes are missing. Specify the 8-digit CN code for each CBAM good imported."
+    },
+    {
+      "id": "CBAM-004",
+      "name": "Default Value Flag — 3x Certificate Multiplier Disclosure",
+      "description": "When CBAM default values are used (no verified actuals), importers must declare this and the 3x certificate multiplier applies.",
+      "category": "cbam",
+      "severity": "warning",
+      "regulation_reference": "Implementing Regulation (EU) 2023/1773, Art. 9(2)",
+      "condition": {
+        "not": {
+          "properties": {
+            "report.uses_cbam_defaults": {"enum": [true]}
+          }
+        }
+      },
+      "message_template": "This report uses CBAM default emission values. Per Art. 9(2), the 3x certificate multiplier will apply. Consider obtaining verified actual emission data from your supplier."
+    },
+    {
+      "id": "CBAM-005",
+      "name": "Verifier Sign-Off Required for Verified Actuals",
+      "description": "Actual emission values (as opposed to defaults) must be verified by an EU-accredited verifier.",
+      "category": "cbam",
+      "severity": "error",
+      "regulation_reference": "Implementing Regulation (EU) 2023/1773, Art. 10",
+      "condition": {
+        "anyOf": [
+          {"properties": {"report.uses_cbam_defaults": {"enum": [true]}}},
+          {"properties": {"report.verification_level": {"enum": ["limited", "reasonable"]}}}
+        ]
+      },
+      "message_template": "Verified actual emissions require sign-off from an EU-accredited verifier. Assign a verifier in the Verification tab."
+    },
+    {
+      "id": "CBAM-006",
+      "name": "Submission Deadline — 31 Days After Quarter End",
+      "description": "CBAM reports must be submitted within 31 days of the end of each calendar quarter.",
+      "category": "cbam",
+      "severity": "warning",
+      "regulation_reference": "Implementing Regulation (EU) 2023/1773, Art. 5(3)",
+      "condition": {
+        "properties": {
+          "report.days_until_deadline": {"minimum": 0}
+        }
+      },
+      "message_template": "CBAM quarterly report deadline is approaching. {report.days_until_deadline} days remaining. Deadline: 31 days after quarter-end."
+    },
+    {
+      "id": "CBAM-007",
+      "name": "Carbon Price Adjustment — Domestic Carbon Tax Credit",
+      "description": "Any carbon price effectively paid in the country of origin must be deducted from CBAM certificate obligation.",
+      "category": "cbam",
+      "severity": "info",
+      "regulation_reference": "Regulation (EU) 2023/956, Art. 9",
+      "condition": {
+        "not": {
+          "required": ["report.domestic_carbon_price_paid"]
+        }
+      },
+      "message_template": "No domestic carbon price has been declared. If a carbon tax was paid in India (e.g. Coal Cess), this can reduce your CBAM certificate obligation. Review India Carbon Market developments."
+    }
+  ]
+}

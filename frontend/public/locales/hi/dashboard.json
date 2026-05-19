@@ -1,0 +1,13 @@
+{
+  "title": "उत्सर्जन डैशबोर्ड",
+  "subtitle": "वर्तमान रिपोर्टिंग अवधि: {{period}}",
+  "total_emissions": "कुल उत्सर्जन",
+  "cbam_exposure": "CBAM एक्सपोज़र",
+  "cbam_certificates": "{{count}} प्रमाणपत्र आवश्यक",
+  "data_completeness": "डेटा पूर्णता",
+  "emission_intensity": "उत्सर्जन तीव्रता",
+  "emissions_trend": "12 माह उत्सर्जन प्रवृत्ति",
+  "scope_breakdown": "स्कोप विश्लेषण",
+  "hotspots": "शीर्ष उत्सर्जन स्रोत",
+  "compliance": "अनुपालन स्थिति"
+}

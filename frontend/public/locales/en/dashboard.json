@@ -1,0 +1,13 @@
+{
+  "title": "Emissions Dashboard",
+  "subtitle": "Current reporting period: {{period}}",
+  "total_emissions": "Total Emissions",
+  "cbam_exposure": "CBAM Exposure",
+  "cbam_certificates": "{{count}} certificates required",
+  "data_completeness": "Data Completeness",
+  "emission_intensity": "Emission Intensity",
+  "emissions_trend": "12-Month Emissions Trend",
+  "scope_breakdown": "Scope Breakdown",
+  "hotspots": "Top Emission Sources",
+  "compliance": "Compliance Status"
+}

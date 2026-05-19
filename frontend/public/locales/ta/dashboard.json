@@ -1,0 +1,13 @@
+{
+  "title": "உமிழ்வு டாஷ்போர்டு",
+  "subtitle": "தற்போதைய அறிக்கையிடல் காலம்: {{period}}",
+  "total_emissions": "மொத்த உமிழ்வு",
+  "cbam_exposure": "CBAM வெளிப்பாடு",
+  "cbam_certificates": "{{count}} சான்றிதழ்கள் தேவை",
+  "data_completeness": "தரவு முழுமை",
+  "emission_intensity": "உமிழ்வு தீவிரம்",
+  "emissions_trend": "12 மாத உமிழ்வு போக்கு",
+  "scope_breakdown": "நோக்கம் விவரம்",
+  "hotspots": "முன்னணி உமிழ்வு மூலங்கள்",
+  "compliance": "இணக்க நிலை"
+}

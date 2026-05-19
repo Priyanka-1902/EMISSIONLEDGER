@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Path \"d:\\\\EMISSIONLEDGER\" -Recurse -File | Select-Object @{N='Path';E={$_.FullName.Replace\\('d:\\\\EMISSIONLEDGER\\\\',''\\)}} | Format-Table -AutoSize)"
+    ]
+  }
+}

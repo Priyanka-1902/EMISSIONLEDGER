@@ -1,0 +1,114 @@
+# India Grid Electricity Emission Factors
+# Source: Central Electricity Authority (CEA), CO2 Baseline Database for Indian Power Sector
+# Version: 18 (2023-24), published December 2024
+# URL: https://cea.nic.in/wp-content/uploads/baseline/2024/12/co2_base_2023_24.pdf
+# GWP basis: IPCC AR6 (100-year)
+# Units: kgCO2e per kWh (net generation basis)
+
+metadata:
+  source: cea_co2_baseline
+  source_publication: "CEA CO2 Baseline Database for Indian Power Sector, Version 18 (2023-24)"
+  published_date: "2024-12-01"
+  gwp_basis: AR6
+  unit: kgCO2e/kWh
+
+factors:
+  # National grid average
+  - id: "cea-national-2023-24"
+    name: "India National Grid — Combined Margin (2023-24)"
+    activity_type: "purchased_electricity"
+    grid_region: "national"
+    value: "0.7051"
+    effective_from: "2023-04-01"
+    effective_to: null
+    version: "18.0.0"
+
+  # Southern Regional Grid (covers TN, KA, AP, TS, KL, PY)
+  - id: "cea-southern-2023-24"
+    name: "Southern Regional Grid — Combined Margin (2023-24)"
+    activity_type: "purchased_electricity"
+    grid_region: "southern"
+    value: "0.6827"
+    effective_from: "2023-04-01"
+    effective_to: null
+    version: "18.0.0"
+
+  # Western Regional Grid (covers MH, GJ, MP, CG, Goa, DD, DNH)
+  - id: "cea-western-2023-24"
+    name: "Western Regional Grid — Combined Margin (2023-24)"
+    activity_type: "purchased_electricity"
+    grid_region: "western"
+    value: "0.7492"
+    effective_from: "2023-04-01"
+    effective_to: null
+    version: "18.0.0"
+
+  # Northern Regional Grid (covers UP, UK, DL, HR, HP, RJ, J&K, PB, CH)
+  - id: "cea-northern-2023-24"
+    name: "Northern Regional Grid — Combined Margin (2023-24)"
+    activity_type: "purchased_electricity"
+    grid_region: "northern"
+    value: "0.7411"
+    effective_from: "2023-04-01"
+    effective_to: null
+    version: "18.0.0"
+
+  # Eastern Regional Grid (covers WB, BH, JH, OR, SK, AN)
+  - id: "cea-eastern-2023-24"
+    name: "Eastern Regional Grid — Combined Margin (2023-24)"
+    activity_type: "purchased_electricity"
+    grid_region: "eastern"
+    value: "0.7903"
+    effective_from: "2023-04-01"
+    effective_to: null
+    version: "18.0.0"
+
+  # Northeastern Regional Grid
+  - id: "cea-northeastern-2023-24"
+    name: "Northeastern Regional Grid — Combined Margin (2023-24)"
+    activity_type: "purchased_electricity"
+    grid_region: "northeastern"
+    value: "0.5764"
+    effective_from: "2023-04-01"
+    effective_to: null
+    version: "18.0.0"
+
+  # State-level: Tamil Nadu (TNEB — Tirupur textiles)
+  - id: "cea-tn-2023-24"
+    name: "Tamil Nadu Grid (TNEB) — Combined Margin (2023-24)"
+    activity_type: "purchased_electricity"
+    grid_region: "tamil_nadu"
+    value: "0.6512"
+    effective_from: "2023-04-01"
+    effective_to: null
+    version: "18.0.0"
+
+  # State-level: Telangana (TSECPDCL — Hyderabad pharma)
+  - id: "cea-telangana-2023-24"
+    name: "Telangana Grid (TSECPDCL) — Combined Margin (2023-24)"
+    activity_type: "purchased_electricity"
+    grid_region: "telangana"
+    value: "0.7214"
+    effective_from: "2023-04-01"
+    effective_to: null
+    version: "18.0.0"
+
+  # State-level: Maharashtra (MSEDCL — Pune auto-components)
+  - id: "cea-maharashtra-2023-24"
+    name: "Maharashtra Grid (MSEDCL) — Combined Margin (2023-24)"
+    activity_type: "purchased_electricity"
+    grid_region: "maharashtra"
+    value: "0.7318"
+    effective_from: "2023-04-01"
+    effective_to: null
+    version: "18.0.0"
+
+  # Karnataka (BESCOM — Bangalore)
+  - id: "cea-karnataka-2023-24"
+    name: "Karnataka Grid (BESCOM) — Combined Margin (2023-24)"
+    activity_type: "purchased_electricity"
+    grid_region: "karnataka"
+    value: "0.6901"
+    effective_from: "2023-04-01"
+    effective_to: null
+    version: "18.0.0"

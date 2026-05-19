@@ -1,0 +1,143 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: timescale/timescaledb:latest-pg15
+    environment:
+      POSTGRES_USER: emissionledger
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: emissionledger
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U emissionledger"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass changeme
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "changeme", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  localstack:
+    image: localstack/localstack:3
+    ports:
+      - "4566:4566"
+    environment:
+      SERVICES: s3,kms,secretsmanager,sqs,ses
+      DEFAULT_REGION: ap-south-1
+      AWS_DEFAULT_REGION: ap-south-1
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - ./scripts/localstack-init.sh:/etc/localstack/init/ready.d/init.sh
+
+  auth:
+    build: ./services/auth
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://emissionledger:changeme@postgres:5432/emissionledger
+      REDIS_URL: redis://:changeme@redis:6379/0
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./services/auth:/app
+      - ./shared:/app/shared
+
+  ingestion:
+    build: ./services/ingestion
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://emissionledger:changeme@postgres:5432/emissionledger
+      REDIS_URL: redis://:changeme@redis:6379/0
+    ports:
+      - "8002:8002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./services/ingestion:/app
+      - ./shared:/app/shared
+
+  calculation:
+    build: ./services/calculation
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://emissionledger:changeme@postgres:5432/emissionledger
+      REDIS_URL: redis://:changeme@redis:6379/0
+    ports:
+      - "8003:8003"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./services/calculation:/app
+      - ./shared:/app/shared
+
+  reporting:
+    build: ./services/reporting
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://emissionledger:changeme@postgres:5432/emissionledger
+      REDIS_URL: redis://:changeme@redis:6379/0
+    ports:
+      - "8004:8004"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./services/reporting:/app
+      - ./shared:/app/shared
+
+  audit:
+    build: ./services/audit
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://emissionledger:changeme@postgres:5432/emissionledger
+    ports:
+      - "8005:8005"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./services/audit:/app
+      - ./shared:/app/shared
+
+  notification:
+    build: ./services/notification
+    env_file: .env
+    environment:
+      REDIS_URL: redis://:changeme@redis:6379/0
+    ports:
+      - "8006:8006"
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./services/notification:/app
+      - ./shared:/app/shared
+
+volumes:
+  postgres_data:
+  redis_data:
+  localstack_data:

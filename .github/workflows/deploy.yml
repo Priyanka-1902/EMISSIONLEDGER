@@ -1,0 +1,130 @@
+name: Deploy — Blue-Green EKS
+
+on:
+  workflow_run:
+    workflows: ["CI — Test, Security Scan, Build"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment
+        required: true
+        default: staging
+        type: choice
+        options: [staging, prod]
+      image_tag:
+        description: Docker image tag to deploy
+        required: false
+
+env:
+  AWS_REGION: ap-south-1
+  EKS_CLUSTER_NAME: emissionledger-prod
+
+jobs:
+  gate:
+    name: Pre-deployment checks
+    runs-on: ubuntu-22.04
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    outputs:
+      image_tag: ${{ steps.resolve.outputs.tag }}
+    steps:
+      - name: Resolve image tag
+        id: resolve
+        run: |
+          TAG="${{ inputs.image_tag || github.event.workflow_run.head_sha }}"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Verify all images exist in ECR
+        run: |
+          for svc in auth calculation ingestion reporting audit notification; do
+            aws ecr describe-images \
+              --repository-name "emissionledger-$svc" \
+              --image-ids "imageTag=${{ steps.resolve.outputs.tag }}" \
+              --region ${{ env.AWS_REGION }} > /dev/null
+          done
+
+  # ── DAST with OWASP ZAP ───────────────────────────────────────────────────
+  dast:
+    name: DAST (OWASP ZAP — staging)
+    runs-on: ubuntu-22.04
+    needs: gate
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.10.0
+        with:
+          target: ${{ vars.STAGING_URL }}
+          rules_file_name: .zap/rules.tsv
+          cmd_options: "-a -j"
+          fail_action: false  # Report; don't block deployment for warnings
+          artifact_name: zap-report
+
+      - name: Upload ZAP report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dast-zap-report
+          path: report_json.json
+
+  # ── Blue-Green Deploy ─────────────────────────────────────────────────────
+  deploy:
+    name: Blue-Green Deploy
+    runs-on: ubuntu-22.04
+    needs: [gate, dast]
+    environment: ${{ inputs.environment || 'prod' }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/GithubActionsEKSDeploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
+
+      - name: Run database migrations (pre-deploy)
+        run: |
+          kubectl apply -f k8s/jobs/migration-job.yaml
+          kubectl wait --for=condition=complete job/alembic-migrate --timeout=300s
+
+      - name: Deploy services (blue-green via Argo Rollouts)
+        run: |
+          IMAGE_TAG="${{ needs.gate.outputs.image_tag }}"
+          for svc in auth calculation ingestion reporting audit notification; do
+            kubectl argo rollouts set image rollout/emissionledger-${svc} \
+              emissionledger-${svc}=${{ vars.ECR_REGISTRY }}/emissionledger-${svc}:${IMAGE_TAG}
+          done
+
+      - name: Wait for rollouts to stabilise
+        run: |
+          for svc in auth calculation ingestion reporting audit notification; do
+            kubectl argo rollouts status rollout/emissionledger-${svc} --timeout 10m
+          done
+
+      - name: Run smoke tests
+        run: |
+          bash scripts/smoke-tests.sh ${{ vars.APP_URL }}
+
+      - name: Promote rollouts (traffic cut-over)
+        run: |
+          for svc in auth calculation ingestion reporting audit notification; do
+            kubectl argo rollouts promote emissionledger-${svc}
+          done
+
+      - name: Notify on failure (PagerDuty)
+        if: failure()
+        uses: PagerDuty/pagerduty-action@main
+        with:
+          pagerduty-routing-key: ${{ secrets.PAGERDUTY_ROUTING_KEY }}
+          pagerduty-payload: |
+            {
+              "summary": "EmissionLedger deploy failed: ${{ github.sha }}",
+              "severity": "critical",
+              "source": "github-actions"
+            }

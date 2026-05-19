@@ -1,0 +1,165 @@
+# EU CBAM Default Emission Values
+# Source: Commission Implementing Regulation (EU) 2023/1773 of 17 August 2023
+#         and Commission Delegated Regulation (EU) 2024/XXX (CBAM default values update)
+# URL: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:JOL_2023_228_R_0001
+# Effective: CBAM transitional phase from 1 October 2023; definitive phase from 1 January 2026
+# Units: tCO2e per tonne of goods (unless stated)
+# Note: Importers should use actual verified values where available.
+#       Default values carry a 3x multiplier on CBAM certificate obligation per Art. 9(2).
+
+metadata:
+  source: eu_cbam_default
+  source_publication: >
+    Commission Implementing Regulation (EU) 2023/1773 of 17 August 2023 laying down
+    the rules for the application of Regulation (EU) 2023/956 of the European Parliament
+    and of the Council as regards reporting obligations for the purposes of the CBAM
+    during the transitional period
+  published_date: "2023-08-17"
+  gwp_basis: AR5  # EU CBAM uses AR5 GWPs
+  effective_from: "2023-10-01"
+  warning: "Default values trigger 3x certificate multiplier per CBAM Art. 9(2). Use verified actuals where possible."
+
+factors:
+  # ── Iron & Steel (CN Chapter 72, 73 relevant codes) ──────────────────────────
+
+  - id: "cbam-crude-steel-bof-default"
+    name: "Crude Steel — Basic Oxygen Furnace (BOF) — CBAM Default"
+    activity_type: "process_emissions"
+    fuel_type: "crude_steel_bof"
+    cn_codes: ["7206", "7207", "7208", "7209", "7210", "7211", "7212"]
+    unit: "tCO2e/tonne_product"
+    value: "2.0418"
+    includes_indirect: true
+    cbam_goods_category: "iron_and_steel"
+    version: "2023.1"
+
+  - id: "cbam-crude-steel-eaf-default"
+    name: "Crude Steel — Electric Arc Furnace (EAF) — CBAM Default"
+    activity_type: "process_emissions"
+    fuel_type: "crude_steel_eaf"
+    cn_codes: ["7206", "7207", "7213", "7214", "7215", "7216", "7217"]
+    unit: "tCO2e/tonne_product"
+    value: "0.4462"
+    includes_indirect: true
+    cbam_goods_category: "iron_and_steel"
+    version: "2023.1"
+
+  - id: "cbam-iron-ore-sinter-default"
+    name: "Iron Ore Sinter — CBAM Default"
+    activity_type: "process_emissions"
+    fuel_type: "iron_ore_sinter"
+    cn_codes: ["2601"]
+    unit: "tCO2e/tonne_product"
+    value: "0.1722"
+    includes_indirect: false
+    cbam_goods_category: "iron_and_steel"
+    version: "2023.1"
+
+  # ── Cement (CN Chapter 25) ────────────────────────────────────────────────────
+
+  - id: "cbam-clinker-default"
+    name: "Clinker — CBAM Default"
+    activity_type: "process_emissions"
+    fuel_type: "clinker"
+    cn_codes: ["2523100000"]
+    unit: "tCO2e/tonne_product"
+    value: "0.8289"
+    includes_indirect: false
+    cbam_goods_category: "cement"
+    version: "2023.1"
+
+  - id: "cbam-portland-cement-default"
+    name: "Portland Cement — CBAM Default"
+    activity_type: "process_emissions"
+    fuel_type: "portland_cement"
+    cn_codes: ["2523210000", "2523290000"]
+    unit: "tCO2e/tonne_product"
+    value: "0.7677"
+    includes_indirect: true
+    cbam_goods_category: "cement"
+    version: "2023.1"
+
+  # ── Aluminium (CN Chapter 76) ─────────────────────────────────────────────────
+
+  - id: "cbam-primary-aluminium-default"
+    name: "Primary Aluminium — CBAM Default (includes indirect)"
+    activity_type: "process_emissions"
+    fuel_type: "primary_aluminium"
+    cn_codes: ["7601100000"]
+    unit: "tCO2e/tonne_product"
+    value: "16.5281"
+    includes_indirect: true
+    cbam_goods_category: "aluminium"
+    version: "2023.1"
+
+  - id: "cbam-secondary-aluminium-default"
+    name: "Secondary Aluminium (from scrap) — CBAM Default"
+    activity_type: "process_emissions"
+    fuel_type: "secondary_aluminium"
+    cn_codes: ["7601200000"]
+    unit: "tCO2e/tonne_product"
+    value: "0.5270"
+    includes_indirect: true
+    cbam_goods_category: "aluminium"
+    version: "2023.1"
+
+  # ── Fertilisers (CN Chapter 31) ───────────────────────────────────────────────
+
+  - id: "cbam-ammonia-default"
+    name: "Ammonia — CBAM Default"
+    activity_type: "process_emissions"
+    fuel_type: "ammonia"
+    cn_codes: ["2814100000", "2814200000"]
+    unit: "tCO2e/tonne_product"
+    value: "2.8482"
+    includes_indirect: false
+    cbam_goods_category: "fertilisers"
+    version: "2023.1"
+
+  - id: "cbam-nitric-acid-default"
+    name: "Nitric Acid — CBAM Default"
+    activity_type: "process_emissions"
+    fuel_type: "nitric_acid"
+    cn_codes: ["2808000000"]
+    unit: "tCO2e/tonne_product"
+    value: "7.9528"
+    includes_indirect: false
+    cbam_goods_category: "fertilisers"
+    version: "2023.1"
+
+  - id: "cbam-urea-default"
+    name: "Urea — CBAM Default"
+    activity_type: "process_emissions"
+    fuel_type: "urea"
+    cn_codes: ["3102100000"]
+    unit: "tCO2e/tonne_product"
+    value: "2.0766"
+    includes_indirect: false
+    cbam_goods_category: "fertilisers"
+    version: "2023.1"
+
+  # ── Hydrogen (CN 2804100000) ─────────────────────────────────────────────────
+
+  - id: "cbam-hydrogen-default"
+    name: "Hydrogen (electrolytic/SMR) — CBAM Default"
+    activity_type: "process_emissions"
+    fuel_type: "hydrogen"
+    cn_codes: ["2804100000"]
+    unit: "tCO2e/tonne_product"
+    value: "10.8900"  # SMR without CCS default
+    includes_indirect: false
+    cbam_goods_category: "hydrogen"
+    version: "2023.1"
+
+  # ── Electricity (CN 2716000000) ───────────────────────────────────────────────
+
+  - id: "cbam-electricity-default"
+    name: "Electricity — CBAM Default (world average)"
+    activity_type: "purchased_electricity"
+    fuel_type: "electricity_cbam"
+    cn_codes: ["2716000000"]
+    unit: "tCO2e/MWh"
+    value: "0.4930"
+    includes_indirect: false
+    cbam_goods_category: "electricity"
+    version: "2023.1"

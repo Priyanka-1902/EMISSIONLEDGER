@@ -1,0 +1,135 @@
+# Fuel Emission Factors
+# Source: IPCC AR6 WG1, Table 2.SM.3 + DEFRA 2024 Conversion Factors
+# Also cross-referenced with BEE PAT cycle data for Indian fuel standards
+# GWP basis: IPCC AR6 (100-year): CH4=29.8 CO2e, N2O=273 CO2e
+# Units: kgCO2e per litre (liquid fuels), kgCO2e per kg (solid/gas fuels)
+
+metadata:
+  source: ipcc_ar6
+  source_publication: "IPCC AR6 WG1 Chapter 2 Supplementary Material, Table 2.SM.3; DEFRA GHG Conversion Factors 2024"
+  published_date: "2024-06-01"
+  gwp_basis: AR6
+  effective_from: "2024-01-01"
+
+factors:
+  # ── Liquid Fuels ─────────────────────────────────────────────────────────────
+
+  - id: "ipcc-diesel-2024"
+    name: "Diesel (HSD) — Stationary Combustion"
+    activity_type: "stationary_combustion"
+    fuel_type: "diesel"
+    unit: "kgCO2e/litre"
+    value: "2.6783"
+    # CO2: 2.6391 + CH4: 0.001 (biogenic correction) + N2O: 0.0382
+    version: "2024.1"
+
+  - id: "ipcc-diesel-mobile-2024"
+    name: "Diesel (HSD) — Mobile Combustion (Road Freight)"
+    activity_type: "mobile_combustion"
+    fuel_type: "diesel"
+    unit: "kgCO2e/litre"
+    value: "2.6957"
+    version: "2024.1"
+
+  - id: "ipcc-petrol-2024"
+    name: "Petrol (Gasoline) — Mobile Combustion"
+    activity_type: "mobile_combustion"
+    fuel_type: "petrol"
+    unit: "kgCO2e/litre"
+    value: "2.3154"
+    version: "2024.1"
+
+  - id: "ipcc-furnace-oil-2024"
+    name: "Furnace Oil (FO) — Stationary Combustion"
+    activity_type: "stationary_combustion"
+    fuel_type: "furnace_oil"
+    unit: "kgCO2e/litre"
+    value: "3.1786"
+    version: "2024.1"
+
+  - id: "ipcc-lpg-2024"
+    name: "LPG — Stationary Combustion"
+    activity_type: "stationary_combustion"
+    fuel_type: "lpg"
+    unit: "kgCO2e/litre"
+    value: "1.6553"
+    version: "2024.1"
+
+  - id: "ipcc-lng-2024"
+    name: "LNG — Mobile Combustion"
+    activity_type: "mobile_combustion"
+    fuel_type: "lng"
+    unit: "kgCO2e/kg"
+    value: "2.8752"
+    version: "2024.1"
+
+  # ── Gaseous Fuels ─────────────────────────────────────────────────────────────
+
+  - id: "ipcc-png-2024"
+    name: "Piped Natural Gas (PNG) — Stationary Combustion"
+    activity_type: "stationary_combustion"
+    fuel_type: "png"
+    unit: "kgCO2e/scm"  # standard cubic metre
+    value: "2.1781"
+    version: "2024.1"
+
+  - id: "ipcc-cng-2024"
+    name: "CNG — Mobile Combustion"
+    activity_type: "mobile_combustion"
+    fuel_type: "cng"
+    unit: "kgCO2e/kg"
+    value: "2.7451"
+    version: "2024.1"
+
+  # ── Solid Fuels ───────────────────────────────────────────────────────────────
+
+  - id: "ipcc-coal-bituminous-2024"
+    name: "Bituminous Coal — Stationary Combustion"
+    activity_type: "stationary_combustion"
+    fuel_type: "coal_bituminous"
+    unit: "kgCO2e/tonne"
+    value: "2325.7"
+    version: "2024.1"
+
+  - id: "ipcc-coal-lignite-2024"
+    name: "Lignite Coal — Stationary Combustion"
+    activity_type: "stationary_combustion"
+    fuel_type: "coal_lignite"
+    unit: "kgCO2e/tonne"
+    value: "1548.9"
+    version: "2024.1"
+
+  - id: "ipcc-wood-chips-2024"
+    name: "Wood Chips / Biomass Pellets — Stationary Combustion (Biogenic)"
+    activity_type: "stationary_combustion"
+    fuel_type: "wood_chips"
+    unit: "kgCO2e/tonne"
+    # Biogenic CO2 excluded per GHG Protocol; only CH4+N2O counted
+    value: "32.4"
+    version: "2024.1"
+
+  # ── Refrigerants (Fugitive) ───────────────────────────────────────────────────
+
+  - id: "ipcc-r410a-2024"
+    name: "R-410A Refrigerant — Fugitive Emissions"
+    activity_type: "fugitive_emissions"
+    fuel_type: "r410a"
+    unit: "kgCO2e/kg"
+    value: "2088"  # GWP100 per AR6
+    version: "2024.1"
+
+  - id: "ipcc-r134a-2024"
+    name: "R-134a Refrigerant — Fugitive Emissions"
+    activity_type: "fugitive_emissions"
+    fuel_type: "r134a"
+    unit: "kgCO2e/kg"
+    value: "1526"
+    version: "2024.1"
+
+  - id: "ipcc-r22-2024"
+    name: "R-22 Refrigerant (HCFC-22) — Fugitive Emissions"
+    activity_type: "fugitive_emissions"
+    fuel_type: "r22"
+    unit: "kgCO2e/kg"
+    value: "1760"
+    version: "2024.1"
